@@ -346,14 +346,6 @@ section.alt { background: #fff; }
   border-radius: 20px;
 }
 
-/* Brand banner */
-.brand-banner img {
-  width: 100%;
-  height: 340px;
-  object-fit: cover;
-  display: block;
-}
-
 /* Logo / tool strip */
 .logo-strip {
   padding: 64px 0;
@@ -625,7 +617,6 @@ footer.site-footer {
   .footer-grid { grid-template-columns: 1fr; }
   .method-steps { flex-direction: column; gap: 32px; }
   .method-steps::before { display: none; }
-  .brand-banner img { height: 220px; }
 }
 
 @media (max-width: 720px) {

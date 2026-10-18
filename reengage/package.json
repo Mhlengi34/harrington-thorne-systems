@@ -1,0 +1,14 @@
+{
+  "name": "reengage",
+  "version": "1.0.0",
+  "description": "Harrington Thorne Systems — WhatsApp re-engagement dashboard",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node --no-warnings=ExperimentalWarning server.js",
+    "test": "node --no-warnings=ExperimentalWarning --test test/*.test.js"
+  }
+}

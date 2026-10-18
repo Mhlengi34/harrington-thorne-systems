@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Re-engage | Harrington Thorne Systems</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <h1>Re-engage</h1>
+      <span id="mode" class="badge"></span>
+    </div>
+    <nav class="wrap tabs" role="tablist">
+      <button class="tab active" data-tab="contacts" role="tab">Contacts</button>
+      <button class="tab" data-tab="compose" role="tab">New campaign</button>
+      <button class="tab" data-tab="campaigns" role="tab">Campaigns</button>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <div id="flash" class="flash" hidden></div>
+
+    <!-- Contacts -->
+    <section id="tab-contacts" class="panel">
+      <div class="grid-2">
+        <form id="contact-form" class="card">
+          <h2 id="contact-form-title">Add contact</h2>
+          <input type="hidden" name="id">
+          <label>Name <input name="name" required autocomplete="off"></label>
+          <label>WhatsApp number <input name="phone" required placeholder="082 123 4567 or +27821234567" autocomplete="off"></label>
+          <label>Notes <textarea name="notes" rows="2"></textarea></label>
+          <label class="check"><input type="checkbox" name="consent"> Contact has agreed to receive WhatsApp messages</label>
+          <label class="check" id="optout-row" hidden><input type="checkbox" name="opted_out"> Opted out</label>
+          <div class="actions">
+            <button type="submit" class="btn">Save contact</button>
+            <button type="button" id="contact-cancel" class="btn ghost" hidden>Cancel</button>
+          </div>
+        </form>
+
+        <form id="import-form" class="card">
+          <h2>Import CSV</h2>
+          <p class="muted">Columns: <code>name, phone, notes, consent</code>. Set consent to <code>yes</code> only for people who opted in.</p>
+          <input type="file" id="csv-file" accept=".csv,text/csv">
+          <div class="actions"><button type="submit" class="btn">Import</button></div>
+          <div id="import-result" class="muted"></div>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Contacts <span id="contact-count" class="muted"></span></h2>
+          <input id="contact-search" type="search" placeholder="Search…">
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Number</th><th>Status</th><th>Last contacted</th><th>Notes</th><th></th></tr></thead>
+            <tbody id="contact-rows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Compose -->
+    <section id="tab-compose" class="panel" hidden>
+      <form id="campaign-form" class="card">
+        <h2>New campaign</h2>
+        <label>Campaign name <input name="name" required placeholder="e.g. October check-in"></label>
+
+        <fieldset>
+          <legend>Message type</legend>
+          <label class="check"><input type="radio" name="kind" value="template" checked> Approved WhatsApp template (needed for anyone who hasn't messaged you in the last 24 hours)</label>
+          <label class="check"><input type="radio" name="kind" value="text"> Free text (only delivered within 24 hours of the contact's last message, or in the Twilio sandbox)</label>
+        </fieldset>
+
+        <div id="template-fields">
+          <label>Template Content SID <input name="contentSid" placeholder="HXxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"></label>
+          <p class="muted">Create and get approval for the template in Twilio Console → Messaging → Content Template Builder. Variable <code>{{1}}</code> is filled with each contact's first name.</p>
+        </div>
+        <div id="text-fields" hidden>
+          <label>Message <textarea name="body" rows="5" placeholder="Hi {first_name}, it's been a while! …"></textarea></label>
+          <p class="muted">Use <code>{first_name}</code> or <code>{name}</code> to personalise. Preview: <span id="preview" class="preview"></span></p>
+        </div>
+
+        <fieldset>
+          <legend>Recipients <span id="recipient-count" class="muted"></span></legend>
+          <div class="actions">
+            <button type="button" class="btn ghost small" id="select-all">Select all</button>
+            <button type="button" class="btn ghost small" id="select-none">Select none</button>
+          </div>
+          <div id="recipient-list" class="recipients"></div>
+          <p class="muted">Only contacts with consent who haven't opted out are listed.</p>
+        </fieldset>
+
+        <div class="actions"><button type="submit" class="btn">Send campaign</button></div>
+      </form>
+    </section>
+
+    <!-- Campaigns -->
+    <section id="tab-campaigns" class="panel" hidden>
+      <div class="card">
+        <h2>Campaigns</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Created</th><th class="num">Recipients</th><th class="num">Sent</th><th class="num">Delivered</th><th class="num">Read</th><th class="num">Failed</th><th></th></tr></thead>
+            <tbody id="campaign-rows"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="campaign-detail" class="card" hidden></div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
